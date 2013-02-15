@@ -27,4 +27,14 @@ class ActiveModelMassUpdateProtectionTest < ActiveSupport::TestCase
         Person.new.sanitize_for_mass_assignment(:a => "b"))
     end
   end
+
+  test "regular attributes should not be allowed if always_protect_mass_assignment is set" do
+    ActiveModel::ForbiddenAttributesProtection.always_protect_mass_assignment = true
+
+    assert_raises(ActiveModel::ForbiddenAttributes) do
+      Person.new.sanitize_for_mass_assignment(:a => "b")
+    end
+
+    ActiveModel::ForbiddenAttributesProtection.always_protect_mass_assignment = nil
+  end
 end
