@@ -22,6 +22,13 @@ class ParametersTaintTest < ActiveSupport::TestCase
     end
   end
 
+  test "fetch where the default is a hash will not mutate the instance" do
+    @params.fetch :foo, {}
+    assert !@params.has_key?(:foo)
+    @params.fetch :foo, {:fizz => :buzz}
+    assert !@params.has_key?(:foo)
+  end
+
   test "not permitted is sticky on accessors" do
     assert !@params.slice(:person).permitted?
     assert !@params[:person][:name].permitted?
